@@ -42,7 +42,7 @@ describe('/api/articles/:article_id', () => {
                 .expect(200)
                 .then(({ body }) => {
                     expect(body.article).toBeInstanceOf(Object);
-                    expect(body.article[0]).toMatchObject({
+                    expect(body.article).toMatchObject({
                         article_id: 1,
                         title: "Living in the shadow of a great man",
                         topic: "mitch",
