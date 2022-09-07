@@ -10,9 +10,9 @@ exports.getArticle = (req, res, next) => {
 };;
 
 exports.patchArticle = (req, res, next) => {
-    const votes = req.body.inc_votes;
+    const { inc_votes } = req.body;
     const { article_id } = req.params;
-    return updateArticle(article_id, votes).then((article) => {
+    return updateArticle(article_id, inc_votes).then((article) => {
         res.status(200).send({ article });
     }).catch(next);
 };

@@ -68,9 +68,8 @@ describe('/api/articles/:article_id', () => {
             const votes = {
                 inc_votes: 2,
             };
-            const article_id = 1;
             return request(app)
-                .patch(`/api/articles/${article_id}`)
+                .patch(`/api/articles/1`)
                 .send(votes)
                 .expect(200)
                 .then(({ body }) => {
@@ -83,9 +82,7 @@ describe('/api/articles/:article_id', () => {
                         created_at: expect.any(String),
                         votes: 102
                     });
-                    return db.query("SELECT * FROM articles WHERE article_id=$1", [
-                        article_id,
-                    ]);
+                    return db.query("SELECT * FROM articles WHERE article_id=1");
                 })
                 .then(({ rows }) => {
                     expect(rows[0]).toMatchObject({
@@ -143,6 +140,18 @@ describe('/api/articles/:article_id', () => {
                         created_at: expect.anything(),
                         votes: 100
                     });
+                });
+        });
+        test('404: article not found', () => {
+            const votes = {
+                inc_votes: 2,
+            };
+            return request(app)
+                .patch(`/api/articles/418`)
+                .send(votes)
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({ msg: 'Article not found' })
                 });
         });
     });
