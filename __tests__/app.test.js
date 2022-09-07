@@ -9,20 +9,13 @@ afterAll(() => db.end());
 
 describe("/api/topics", () => {
     describe('GET, 200: returns all topics', () => {
-        test('returns an array of length 3', () => {
+        test('returns an array of 3 objects with the expected keys', () => {
             return request(app)
                 .get('/api/topics')
                 .expect(200)
                 .then(({ body }) => {
                     expect(body.topics).toBeInstanceOf(Array);
                     expect(body.topics.length).toBe(3);
-                });
-        });
-        test('returns an array of object containing slug and description properties', () => {
-            return request(app)
-                .get('/api/topics')
-                .expect(200)
-                .then(({ body }) => {
                     body.topics.forEach((topic) => {
                         expect(topic).toBeInstanceOf(Object);
                         expect(topic).toMatchObject({
@@ -52,22 +45,45 @@ describe('/api/articles/:article_id', () => {
                         votes: 100
                     });
                 })
-        })
+        });
         test("400: bad request", () => {
             return request(app)
                 .get(`/api/articles/long`)
                 .expect(400)
                 .then(({ body }) => {
                     expect(body).toEqual({ msg: 'Invalid input' })
-                })
-        })
+                });
+        });
         test('404: article not found', () => {
             return request(app)
                 .get(`/api/articles/418`)
                 .expect(404)
                 .then(({ body }) => {
                     expect(body).toEqual({ msg: 'Article not found' })
-                })
-        })
-    })
-})
+                });
+        });
+    });
+});
+
+describe("/api/Users", () => {
+    describe('GET, 200: returns all Users', () => {
+        test('returns an array of 4 objects with the expected keys', () => {
+            return request(app)
+                .get('/api/Users')
+                .expect(200)
+                .then(({ body }) => {
+                    console.log(body.users);
+                    expect(body.users).toBeInstanceOf(Array);
+                    expect(body.users.length).toBe(4);
+                    body.users.forEach((user) => {
+                        expect(user).toBeInstanceOf(Object);
+                        expect(user).toMatchObject({
+                            username: expect.any(String),
+                            name: expect.any(String),
+                            avatar_url: expect.any(String),
+                        });
+                    });
+                });
+        });
+    });
+});
