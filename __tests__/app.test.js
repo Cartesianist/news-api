@@ -34,6 +34,7 @@ describe('/api/articles/:article_id', () => {
                 .get(`/api/articles/1`)
                 .expect(200)
                 .then(({ body }) => {
+                    console.log(body.article);
                     expect(body.article).toBeInstanceOf(Object);
                     expect(body.article).toMatchObject({
                         article_id: 1,
@@ -42,7 +43,8 @@ describe('/api/articles/:article_id', () => {
                         author: "butter_bridge",
                         body: "I find this existence challenging",
                         created_at: expect.any(String),
-                        votes: 100
+                        votes: 100,
+                        comments: 11
                     });
                 })
         });

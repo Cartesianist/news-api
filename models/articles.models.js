@@ -12,3 +12,12 @@ exports.fetchArticle = (article_id) => {
         return rows[0];
     });
 };
+
+exports.commentCount = (article_id) => {
+    return db.query(
+        `SELECT COUNT(*) FROM comments
+        WHERE article_id=$1;`, [article_id]
+    ).then(({ rows }) => {
+        return rows[0].count;
+    })
+}
