@@ -65,11 +65,11 @@ describe('/api/articles/:article_id', () => {
     });
 });
 
-describe("/api/Users", () => {
+describe("/api/users", () => {
     describe('GET, 200: returns all Users', () => {
         test('returns an array of 4 objects with the expected keys', () => {
             return request(app)
-                .get('/api/Users')
+                .get('/api/users')
                 .expect(200)
                 .then(({ body }) => {
                     console.log(body.users);
