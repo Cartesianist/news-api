@@ -142,6 +142,18 @@ describe('/api/articles/:article_id', () => {
                     });
                 });
         });
+        test("400: bad request", () => {
+            const votes = {
+                inc_votes: 2,
+            };
+            return request(app)
+                .patch(`/api/articles/one`)
+                .send(votes)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({ msg: 'Invalid input' })
+                });
+        });
         test('404: article not found', () => {
             const votes = {
                 inc_votes: 2,
