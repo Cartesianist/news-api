@@ -190,3 +190,29 @@ describe("/api/users", () => {
         });
     });
 });
+// describe("/api/articles", () => {
+//     describe('GET, 200: returns all articles', () => {
+//         test('returns an array of 3 objects with the expected keys', () => {
+//             return request(app)
+//                 .get('/api/articles')
+//                 .expect(200)
+//                 .then(({ body }) => {
+//                     expect(body.articles).toBeInstanceOf(Array);
+//                     expect(body.articles.length).toBe(12);
+//                     body.articles.forEach((article) => {
+//                         expect(article).toBeInstanceOf(Object);
+//                         expect(article).toMatchObject({
+//                             article_id: expect.any(Number),
+//                             title: expect.any(String),
+//                             topic: expect.any(String),
+//                             author: expect.any(String),
+//                             body: expect.any(String),
+//                             created_at: expect.any(String),
+//                             votes: expect.any(Number),
+//                             comments: expect.any(Number)
+//                         });
+//                     });
+//                 });
+//         });
+//     });
+// });
