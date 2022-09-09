@@ -43,7 +43,7 @@ describe('/api/articles/:article_id', () => {
                         body: "I find this existence challenging",
                         created_at: expect.any(String),
                         votes: 100,
-                        comments: 11
+                        comment_count: "11"
                     });
                 })
         });

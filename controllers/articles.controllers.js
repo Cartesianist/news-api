@@ -2,8 +2,7 @@ const { fetchArticle, commentCount, updateArticle } = require('../models/article
 
 exports.getArticle = (req, res, next) => {
     const { article_id } = req.params;
-    Promise.all([fetchArticle(article_id), commentCount(article_id)]).then(([article, count]) => {
-        article.comments = parseInt(count);
+    return fetchArticle(article_id).then((article) => {
         res.status(200).send({ article })
     }).catch(next);
 };
