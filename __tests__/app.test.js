@@ -190,7 +190,7 @@ describe("/api/users", () => {
         });
     });
 });
-describe.only("/api/articles", () => {
+describe("/api/articles", () => {
     describe('GET, 200: returns all articles', () => {
         test('returns an array of 12 objects with the expected keys', () => {
             return request(app)
