@@ -190,7 +190,7 @@ describe("/api/users", () => {
         });
     });
 });
-describe("/api/articles", () => {
+describe.only("/api/articles", () => {
     describe('GET, 200: returns all articles', () => {
         test('returns an array of 12 objects with the expected keys', () => {
             return request(app)
@@ -213,6 +213,27 @@ describe("/api/articles", () => {
                         });
                     });
                 });
+        });
+        test('sort by date in asc order when no query provided', () => {
+            return request(app)
+                .get('/api/articles')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("created_at", {
+                        ascending: true,
+                    });
+                });
+        });
+        test('return by topic', () => {
+            return request(app)
+                .get("/api/articles?topic=cats")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles.length).toBe(1);
+                    body.articles.forEach((article) => {
+                        expect(article.topic).toBe("cats");
+                    })
+                })
         });
     });
 });
