@@ -24,7 +24,7 @@ exports.updateArticle = (article_id, inc_votes) => {
         }
         return rows[0];
     });
-}
+};
 
 exports.fetchArticles = (topic) => {
     let query =
@@ -48,4 +48,4 @@ exports.fetchArticles = (topic) => {
         }
         return rows;
     });
-}
+};

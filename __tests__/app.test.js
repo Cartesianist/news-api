@@ -237,3 +237,51 @@ describe("/api/articles", () => {
         });
     });
 });
+
+describe.only("/api/articles/:article_id/comments", () => {
+    describe('GET, 200: returns all comments with a particular article id', () => {
+        test('returns an array', () => {
+            return request(app)
+                .get('/api/articles/1/comments')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.comments).toBeInstanceOf(Array);
+                });
+        })
+        test('returns an array of 12 objects with the expected keys', () => {
+            return request(app)
+                .get('/api/articles/1/comments')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.comments).toBeInstanceOf(Array);
+                    expect(body.comments.length).toBe(11);
+                    body.comments.forEach((comment) => {
+                        expect(comment).toBeInstanceOf(Object);
+                        expect(comment).toMatchObject({
+                            comment_id: expect.any(Number),
+                            author: expect.any(String),
+                            body: expect.any(String),
+                            created_at: expect.any(String),
+                            votes: expect.any(Number),
+                        });
+                    });
+                });
+        });
+    });
+    test("400: bad request", () => {
+        return request(app)
+            .get(`/api/articles/long/comments`)
+            .expect(400)
+            .then(({ body }) => {
+                expect(body).toEqual({ msg: 'Invalid input' })
+            });
+    });
+    test('404: Comments not found', () => {
+        return request(app)
+            .get(`/api/articles/418/comments`)
+            .expect(404)
+            .then(({ body }) => {
+                expect(body).toEqual({ msg: 'Comments not found' })
+            });
+    });
+});
