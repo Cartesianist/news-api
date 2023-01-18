@@ -239,7 +239,7 @@ describe("/api/articles", () => {
     });
 });
 
-describe.only("/api/articles/:article_id/comments", () => {
+describe("/api/articles/:article_id/comments", () => {
     describe('GET, 200: returns all comments with a particular article id', () => {
         test('returns an array', () => {
             return request(app)

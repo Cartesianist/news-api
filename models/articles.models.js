@@ -47,4 +47,5 @@ exports.fetchArticles = (topic) => {
             return Promise.reject({ status: 404, msg: 'Articles not found' })
         }
         return rows;
-    });
+    })
+};
