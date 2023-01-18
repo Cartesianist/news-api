@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express();
 const { getTopics } = require('./controllers/topics.controllers');
-const { getArticle, patchArticle } = require('./controllers/articles.controllers');
+const { getArticle, patchArticle, getArticles } = require('./controllers/articles.controllers');
 const { getUsers } = require('./controllers/users.controllers');
+const { getComments } = require('./controllers/comments.controllers');
 
 app.use(express.json());
 
@@ -10,6 +11,8 @@ app.get('/api/topics', getTopics);
 app.get('/api/articles/:article_id', getArticle);
 app.get('/api/users', getUsers);
 app.patch('/api/articles/:article_id', patchArticle);
+app.get('/api/articles', getArticles);
+app.get('/api/articles/:article_id/comments', getComments)
 
 app.use((err, req, res, next) => {
     const badRequestCodes = ['22P02', '23502']
