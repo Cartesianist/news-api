@@ -285,4 +285,53 @@ describe("/api/articles/:article_id/comments", () => {
                 expect(body).toEqual({ msg: 'Comments not found' })
             });
     });
+    describe('POST, 201: returns new comment added to the database', () => {
+        test('returns the new comment and also adds it to the database', () => {
+            const newComment = {
+                username: 'butter_bridge',
+                body: 'butter under the bridge'
+            };
+            return request(app)
+                .post('/api/articles/1/comments')
+                .send(newComment)
+                .expect(201)
+                .then(({ body }) => {
+                    expect(body).toBeInstanceOf(Object);
+                    expect(body.comment).toMatchObject({
+                        comment_id: 19,
+                        author: 'butter_bridge',
+                        body: 'butter under the bridge',
+                        created_at: expect.any(String),
+                        votes: 0,
+                    });
+
+                    return db.query(" SELECT * FROM comments WHERE comment_id=19");
+                })
+                .then((res) => {
+                    expect(res.rows[0])
+                })
+        })
+        test("400: error when passed empty object", () => {
+            return request(app)
+                .post("/api/articles/1/comments")
+                .send({})
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({ msg: "Invalid input" });
+                });
+        });
+        test('400: returns an error when passed invalid properties', () => {
+            const input = {
+                username: "The Codfather",
+                body: "two",
+            };
+            return request(app)
+                .post('/api/articles/1/comments')
+                .send(input)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({ msg: "Invalid input" });
+                })
+        })
+    })
 });

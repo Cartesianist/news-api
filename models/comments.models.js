@@ -12,3 +12,13 @@ exports.fetchComments = (article_id) => {
         return rows;
     });
 }
+
+exports.createComment = (newComment, article_id) => {
+    const { username, body } = newComment;
+    const created_at = new Date();
+    return db.query("INSERT INTO comments (author, body, created_at, votes, article_id) VALUES ($1, $2, $3, 0 , $4) returning *;", [username, body, created_at, article_id]
+    )
+        .then((comment) => {
+            return comment.rows[0]
+        });
+};
