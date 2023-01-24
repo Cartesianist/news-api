@@ -3,6 +3,7 @@ const seed = require('../db/seeds/seed');
 const data = require('../db/data/test-data');
 const request = require("supertest");
 const app = require('../app');
+const { response } = require('../app');
 
 beforeEach(() => seed(data));
 afterAll(() => db.end());
@@ -376,4 +377,42 @@ describe("/api/articles/:article_id/comments", () => {
                 })
         })
     })
+});
+
+describe("/api/comments/:comment_id", () => {
+    describe("DELETE", () => {
+        test("204: returns no content and removes the comment from the Database", () => {
+            const deletedCommentID = 5;
+            return request(app)
+                .delete(`/api/comments/${deletedCommentID}`)
+                .expect(204)
+                .then(() => {
+                    return db.query("SELECT * FROM comments WHERE comment_id=$1;", [deletedCommentID]);
+                })
+                .then((res) => {
+                    expect(res.rows.length).toBe(0)
+                })
+                .then(() => {
+                    return db.query("SELECT * FROM comments WHERE comment_id=1;")
+                })
+                .then((res) => {
+                    expect(res.rows[0]).toMatchObject({
+                        article_id: 9,
+                        comment_id: 1,
+                        author: 'butter_bridge',
+                        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+                        created_at: expect.any(Date),
+                        votes: 16,
+                    });
+                });
+        });
+        test("404: id is valid but does not exist", () => {
+            return request(app)
+                .delete("/api/comments/9999")
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({ msg: 'Comment not found' })
+                })
+        })
+    });
 });

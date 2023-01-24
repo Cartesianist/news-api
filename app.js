@@ -3,7 +3,7 @@ const app = express();
 const { getTopics } = require('./controllers/topics.controllers');
 const { getArticle, patchArticle, getArticles } = require('./controllers/articles.controllers');
 const { getUsers } = require('./controllers/users.controllers');
-const { getComments, postComment } = require('./controllers/comments.controllers');
+const { getComments, postComment, deleteComment } = require('./controllers/comments.controllers');
 
 app.use(express.json());
 
@@ -14,6 +14,7 @@ app.patch('/api/articles/:article_id', patchArticle);
 app.get('/api/articles', getArticles);
 app.get('/api/articles/:article_id/comments', getComments);
 app.post('/api/articles/:article_id/comments', postComment);
+app.delete('/api/comments/:comment_id', deleteComment)
 
 app.use((err, req, res, next) => {
     const badRequestCodes = ['22P02', '23502', '23503']
