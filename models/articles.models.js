@@ -23,10 +23,9 @@ exports.updateArticle = (article_id, inc_votes) => {
         }
         return rows[0];
     });
-
 };
 
-exports.fetchArticles = (topic) => {
+exports.fetchArticles = (topic, sort_by, order) => {
     let query =
         `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.body, articles.created_at, articles.votes, COUNT(comments.article_id) AS comment_count 
         FROM articles
@@ -39,8 +38,7 @@ exports.fetchArticles = (topic) => {
         queryValues.push(topic);
     }
 
-    query += ` GROUP BY articles.article_id
-        ORDER BY created_at ASC;`;
+    query += ` GROUP BY articles.article_id ORDER BY ${sort_by ? sort_by : 'created_at'} ${order ? order : "DESC"};`;
 
     return db.query(query, queryValues).then(({ rows }) => {
         if (!rows.length) {

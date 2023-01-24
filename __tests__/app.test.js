@@ -215,13 +215,13 @@ describe("/api/articles", () => {
                     });
                 });
         });
-        test('sort by date in asc order when no query provided', () => {
+        test('sort by date in desc order when no query provided', () => {
             return request(app)
                 .get('/api/articles')
                 .expect(200)
                 .then(({ body }) => {
                     expect(body.articles).toBeSortedBy("created_at", {
-                        ascending: true,
+                        descending: true,
                     });
                 });
         });
@@ -237,6 +237,48 @@ describe("/api/articles", () => {
                 })
         });
     });
+    describe('endpoint should accept the queries: sort_by and order', () => {
+        test('should default sort articles by date descending', () => {
+            return request(app)
+                .get('/api/articles')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("created_at", {
+                        descending: true
+                    })
+                })
+        })
+        test('should sort articles by a specified column when sort_by query is present descending by default', () => {
+            return request(app)
+                .get('/api/articles?sort_by=topic')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("topic", {
+                        descending: true
+                    })
+                })
+        })
+        test('should sort articles in ascending order when order query is set to asc', () => {
+            return request(app)
+                .get('/api/articles?order=asc')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("created_at", {
+                        ascending: true
+                    })
+                })
+        })
+        test('should sort articles by a specified column when sort_by query is present', () => {
+            return request(app)
+                .get('/api/articles?sort_by=author&order=asc')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("author", {
+                        ascending: true
+                    })
+                })
+        })
+    })
 });
 
 describe("/api/articles/:article_id/comments", () => {
