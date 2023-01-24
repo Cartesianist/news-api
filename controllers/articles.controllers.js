@@ -1,5 +1,5 @@
 
-const { fetchArticle, updateArticle, fetchArticles, commentCount} = require('../models/articles.models');
+const { fetchArticle, updateArticle, fetchArticles } = require('../models/articles.models');
 
 
 exports.getArticle = (req, res, next) => {
@@ -17,8 +17,8 @@ exports.patchArticle = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-    const { topic } = req.query;
-    return fetchArticles(topic)
+    const { topic, sort_by, order } = req.query;
+    return fetchArticles(topic, sort_by, order)
         .then((articles) => {
             res.status(200).send({ articles })
         })
