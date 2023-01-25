@@ -28,6 +28,119 @@ describe("/api/topics", () => {
         });
     });
 });
+
+describe("/api/users", () => {
+    describe('GET, 200: returns all Users', () => {
+        test('returns an array of 4 objects with the expected keys', () => {
+            return request(app)
+                .get('/api/users')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.users).toBeInstanceOf(Array);
+                    expect(body.users.length).toBe(4);
+                    body.users.forEach((user) => {
+                        expect(user).toBeInstanceOf(Object);
+                        expect(user).toMatchObject({
+                            username: expect.any(String),
+                            name: expect.any(String),
+                            avatar_url: expect.any(String),
+                        });
+                    });
+                });
+        });
+    });
+});
+
+describe("/api/articles", () => {
+    describe('GET, 200: returns all articles', () => {
+        test('returns an array of 12 objects with the expected keys', () => {
+            return request(app)
+                .get('/api/articles')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeInstanceOf(Array);
+                    expect(body.articles.length).toBe(12);
+                    body.articles.forEach((article) => {
+                        expect(article).toBeInstanceOf(Object);
+                        expect(article).toMatchObject({
+                            article_id: expect.any(Number),
+                            title: expect.any(String),
+                            topic: expect.any(String),
+                            author: expect.any(String),
+                            body: expect.any(String),
+                            created_at: expect.any(String),
+                            votes: expect.any(Number),
+                            comment_count: expect.any(String)
+                        });
+                    });
+                });
+        });
+        test('sort by date in desc order when no query provided', () => {
+            return request(app)
+                .get('/api/articles')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("created_at", {
+                        descending: true,
+                    });
+                });
+        });
+        test('return by topic', () => {
+            return request(app)
+                .get("/api/articles?topic=cats")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles.length).toBe(1);
+                    body.articles.forEach((article) => {
+                        expect(article.topic).toBe("cats");
+                    })
+                })
+        });
+    });
+    describe('endpoint should accept the queries: sort_by and order', () => {
+        test('should default sort articles by date descending', () => {
+            return request(app)
+                .get('/api/articles')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("created_at", {
+                        descending: true
+                    })
+                })
+        })
+        test('should sort articles by a specified column when sort_by query is present descending by default', () => {
+            return request(app)
+                .get('/api/articles?sort_by=topic')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("topic", {
+                        descending: true
+                    })
+                })
+        })
+        test('should sort articles in ascending order when order query is set to asc', () => {
+            return request(app)
+                .get('/api/articles?order=asc')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("created_at", {
+                        ascending: true
+                    })
+                })
+        })
+        test('should sort articles by a specified column when sort_by query is present', () => {
+            return request(app)
+                .get('/api/articles?sort_by=author&order=asc')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("author", {
+                        ascending: true
+                    })
+                })
+        })
+    })
+});
+
 describe('/api/articles/:article_id', () => {
     describe('GET', () => {
         test("200: returns specific article", () => {
@@ -171,117 +284,6 @@ describe('/api/articles/:article_id', () => {
     });
 });
 
-describe("/api/users", () => {
-    describe('GET, 200: returns all Users', () => {
-        test('returns an array of 4 objects with the expected keys', () => {
-            return request(app)
-                .get('/api/users')
-                .expect(200)
-                .then(({ body }) => {
-                    expect(body.users).toBeInstanceOf(Array);
-                    expect(body.users.length).toBe(4);
-                    body.users.forEach((user) => {
-                        expect(user).toBeInstanceOf(Object);
-                        expect(user).toMatchObject({
-                            username: expect.any(String),
-                            name: expect.any(String),
-                            avatar_url: expect.any(String),
-                        });
-                    });
-                });
-        });
-    });
-});
-describe("/api/articles", () => {
-    describe('GET, 200: returns all articles', () => {
-        test('returns an array of 12 objects with the expected keys', () => {
-            return request(app)
-                .get('/api/articles')
-                .expect(200)
-                .then(({ body }) => {
-                    expect(body.articles).toBeInstanceOf(Array);
-                    expect(body.articles.length).toBe(12);
-                    body.articles.forEach((article) => {
-                        expect(article).toBeInstanceOf(Object);
-                        expect(article).toMatchObject({
-                            article_id: expect.any(Number),
-                            title: expect.any(String),
-                            topic: expect.any(String),
-                            author: expect.any(String),
-                            body: expect.any(String),
-                            created_at: expect.any(String),
-                            votes: expect.any(Number),
-                            comment_count: expect.any(String)
-                        });
-                    });
-                });
-        });
-        test('sort by date in desc order when no query provided', () => {
-            return request(app)
-                .get('/api/articles')
-                .expect(200)
-                .then(({ body }) => {
-                    expect(body.articles).toBeSortedBy("created_at", {
-                        descending: true,
-                    });
-                });
-        });
-        test('return by topic', () => {
-            return request(app)
-                .get("/api/articles?topic=cats")
-                .expect(200)
-                .then(({ body }) => {
-                    expect(body.articles.length).toBe(1);
-                    body.articles.forEach((article) => {
-                        expect(article.topic).toBe("cats");
-                    })
-                })
-        });
-    });
-    describe('endpoint should accept the queries: sort_by and order', () => {
-        test('should default sort articles by date descending', () => {
-            return request(app)
-                .get('/api/articles')
-                .expect(200)
-                .then(({ body }) => {
-                    expect(body.articles).toBeSortedBy("created_at", {
-                        descending: true
-                    })
-                })
-        })
-        test('should sort articles by a specified column when sort_by query is present descending by default', () => {
-            return request(app)
-                .get('/api/articles?sort_by=topic')
-                .expect(200)
-                .then(({ body }) => {
-                    expect(body.articles).toBeSortedBy("topic", {
-                        descending: true
-                    })
-                })
-        })
-        test('should sort articles in ascending order when order query is set to asc', () => {
-            return request(app)
-                .get('/api/articles?order=asc')
-                .expect(200)
-                .then(({ body }) => {
-                    expect(body.articles).toBeSortedBy("created_at", {
-                        ascending: true
-                    })
-                })
-        })
-        test('should sort articles by a specified column when sort_by query is present', () => {
-            return request(app)
-                .get('/api/articles?sort_by=author&order=asc')
-                .expect(200)
-                .then(({ body }) => {
-                    expect(body.articles).toBeSortedBy("author", {
-                        ascending: true
-                    })
-                })
-        })
-    })
-});
-
 describe("/api/articles/:article_id/comments", () => {
     describe('GET, 200: returns all comments with a particular article id', () => {
         test('returns an array', () => {
@@ -341,6 +343,7 @@ describe("/api/articles/:article_id/comments", () => {
                 .then(({ body }) => {
                     expect(body).toBeInstanceOf(Object);
                     expect(body.comment).toMatchObject({
+                        article_id: 1,
                         comment_id: 19,
                         author: 'butter_bridge',
                         body: 'butter under the bridge',
