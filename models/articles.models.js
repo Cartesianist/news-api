@@ -37,8 +37,9 @@ exports.fetchArticles = (topic, sort_by, order) => {
         query += ` WHERE articles.topic=$1`;
         queryValues.push(topic);
     }
-
-    query += ` GROUP BY articles.article_id ORDER BY ${sort_by ? sort_by : 'created_at'} ${order ? order : "DESC"};`;
+    query += ` GROUP BY articles.article_id ORDER BY 
+    ${['title', 'topic', 'author'].includes(sort_by) ? sort_by : 'created_at'}
+    ${order === 'asc' ? 'ASC' : 'DESC'}`;
 
     return db.query(query, queryValues).then(({ rows }) => {
         if (!rows.length) {

@@ -113,6 +113,7 @@ describe("/api/articles", () => {
                 .get('/api/articles?sort_by=topic')
                 .expect(200)
                 .then(({ body }) => {
+                    console.log(body.articles);
                     expect(body.articles).toBeSortedBy("topic", {
                         descending: true
                     })
@@ -133,8 +134,29 @@ describe("/api/articles", () => {
                 .get('/api/articles?sort_by=author&order=asc')
                 .expect(200)
                 .then(({ body }) => {
+                    console.log(body.articles);
                     expect(body.articles).toBeSortedBy("author", {
                         ascending: true
+                    })
+                })
+        })
+        test("200, bad request for sort_by query will default to created_at", () => {
+            return request(app)
+                .get('/api/articles?sort_by=not-a-column')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("created_at", {
+                        descending: true
+                    })
+                })
+        })
+        test("200, bad request for order query will default to DESC", () => {
+            return request(app)
+                .get('/api/articles?order=not-asc-or-desc')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("created_at", {
+                        descending: true
                     })
                 })
         })

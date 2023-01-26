@@ -8,6 +8,7 @@ exports.getArticle = (req, res, next) => {
         res.status(200).send({ article })
     }).catch(next);
 };
+
 exports.patchArticle = (req, res, next) => {
     const { inc_votes } = req.body;
     const { article_id } = req.params;

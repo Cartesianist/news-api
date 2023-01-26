@@ -81,7 +81,7 @@ module.exports = [
   },
   {
     title: "Am I a cat?",
-    topic: "mitch",
+    topic: "paper",
     author: "icellusedkars",
     body: "Having run out of ideas for articles, I am staring at the wall blankly, like a cat. Does this make me a cat?",
     created_at: 1579126860000,
