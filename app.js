@@ -7,6 +7,7 @@ const { getComments, postComment, deleteComment } = require('./controllers/comme
 
 app.use(express.json());
 
+app.get('/api', getJSONInstructions);
 app.get('/api/topics', getTopics);
 app.get('/api/articles/:article_id', getArticle);
 app.get('/api/users', getUsers);

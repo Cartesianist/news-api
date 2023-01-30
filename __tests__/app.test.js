@@ -316,7 +316,7 @@ describe("/api/articles/:article_id/comments", () => {
                     expect(body.comments).toBeInstanceOf(Array);
                 });
         })
-        test('returns an array of 12 objects with the expected keys', () => {
+        test('returns an array of 11 objects with the expected keys', () => {
             return request(app)
                 .get('/api/articles/1/comments')
                 .expect(200)
