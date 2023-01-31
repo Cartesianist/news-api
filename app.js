@@ -4,6 +4,7 @@ const { getTopics } = require('./controllers/topics.controllers');
 const { getArticle, patchArticle, getArticles } = require('./controllers/articles.controllers');
 const { getUsers } = require('./controllers/users.controllers');
 const { getComments, postComment, deleteComment } = require('./controllers/comments.controllers');
+const { getJSONInstructions } = require('./controllers/instructions.controllers')
 
 app.use(express.json());
 
