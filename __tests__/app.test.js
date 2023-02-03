@@ -113,7 +113,6 @@ describe("/api/articles", () => {
                 .get('/api/articles?sort_by=topic')
                 .expect(200)
                 .then(({ body }) => {
-                    console.log(body.articles);
                     expect(body.articles).toBeSortedBy("topic", {
                         descending: true
                     })
@@ -134,7 +133,6 @@ describe("/api/articles", () => {
                 .get('/api/articles?sort_by=author&order=asc')
                 .expect(200)
                 .then(({ body }) => {
-                    console.log(body.articles);
                     expect(body.articles).toBeSortedBy("author", {
                         ascending: true
                     })

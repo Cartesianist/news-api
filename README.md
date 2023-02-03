@@ -1,11 +1,23 @@
 # Northcoders News API
 
-## Environment variables
+## What is this repo???
 
-To run this project locally you would need to create `.env.test` and `.env.development` files and into each, add the command:
+It is a backend API built with Node.js and postgres, and was created as part of the Northcoders course curriculum. The API is built for the purpose of accessing application data programmatically.
 
-```
-PGDATABASE=database_name_here
-```
+## Requirements
 
-with the correct database name for that environment (see `/db/setup.sql` for the database names).
+- Node.js: `node -v | v18.4.0`
+- postgres: `psql -v | 8.7.3`
+
+## Getting started
+
+1. Cloning this repository
+2. Install project dependencies with `npm install`
+3. Add the following files:
+
+   - .env.test : `PGDATABASE=nc_news_test`
+   - .env.development : `PGDATABASE=nc_news`
+
+4. Run the database setup script `npm run setup-dbs`
+5. Seed the database `npm run seed-prod`
+6. Run the tests `npm t`
