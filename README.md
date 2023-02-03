@@ -11,7 +11,7 @@ It is a backend API built with Node.js and postgres, and was created as part of 
 
 ## Getting started
 
-1. Cloning this repository
+1. Clone this repository
 2. Install project dependencies with `npm install`
 3. Add the following files:
 
@@ -21,3 +21,11 @@ It is a backend API built with Node.js and postgres, and was created as part of 
 4. Run the database setup script `npm run setup-dbs`
 5. Seed the database `npm run seed-prod`
 6. Run the tests `npm t`
+
+## Using the API
+
+Access the "/api" endpoint which will detail available endpoints.
+
+## Additional information
+
+Hosted version of the API: https://news-articles.onrender.com
